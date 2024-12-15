@@ -5,13 +5,12 @@ const Notificacao = require('../models/Notificacao');
 
 
 module.exports = {
-  async notificacoes(req, res) 
-  { 
-    try { 
-      const notificacoes = await Notificacao.find({ usuarioId: req.usuarioId }); 
-      res.send(notificacoes); 
-    } catch (error) { 
-      res.status(500).send('Erro ao buscar notificações'); 
-    } 
+  async getNotificacoesGestor(req, res) {
+    // Lógica para obter notificações recebidas pelo gestor
+  },
+
+  async getNotificacoesFuncionario(req, res) {
+    // Lógica para obter notificações recebidas pelo funcionário
   }
 };
+
