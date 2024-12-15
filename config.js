@@ -12,7 +12,10 @@ const config = {
   "IIntegracaoDAO": "IntegracaoDAO_Mongoose.js",
   "IFrequenciaDAO": "FrequenciaDAO_Mongoose.js",
   "INotificacaoDAO": "NotificacaoDAO_Mongoose.js",
-  "IAuthDAO": "AuthDAO_Mongoose.js" 
+  "IAuthDAO": "AuthDAO_Mongoose.js",
+  "IPerfilDAO": "PerfilDAO_Mongoose.js",
+  
+
 };
 
 module.exports = config;

@@ -1,31 +1,28 @@
-
 const IUsuarioController = require('./IUsuarioController');
 const config = require('../config');
-const UsuarioDAO = require('../persistencelayer/dao'+config.IUsuarioDAO);
+const UsuarioDAO = require('../persistencelayer/dao/' + config.IUsuarioDAO);
 let usuarioDao = new UsuarioDAO();
-  
+
 class UsuarioController extends IUsuarioController {
-  constructor(){
+  constructor() {
     super();
   }
 
-  
-  getUsuario(req, res){
-    let user = usuarioDao.getUsuario(req, res);
+  async getUsuario(req, res) {
+    let user = await usuarioDao.getUsuario(req);
     return res.json(user);
   }
-    
-  async cadastrarFuncionario(req, res) 
-  {
+
+  async cadastrarFuncionario(req, res) {
     let user = await usuarioDao.cadastrarFuncionario(req);
     return res.json(user);
-    
   }
 
   async listarFuncionarios(req, res) {
-    let users = await usuarioDao.listarFuncionarios(req);;
+    let users = await usuarioDao.listarFuncionarios(req);
     return res.json(users);
   }
+
   async listarPorCargo(req, res) {
     let users = await usuarioDao.listarPorCargo(req);
     return res.json(users);
@@ -40,5 +37,6 @@ class UsuarioController extends IUsuarioController {
     let user = await usuarioDao.editarFuncionario(req);
     return res.json(user);
   }
-} 
+}
+
 module.exports = UsuarioController;

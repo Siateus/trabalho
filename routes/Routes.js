@@ -1,79 +1,74 @@
-
 const express = require('express');
 const bodyParser = require('body-parser');
-//================================
-
-var cors = require('cors');
+const cors = require('cors');
 const IRoutes = require('./IRoutes.js');
+
 const app = express();
 
+const config = require('../config.js');
+let AuthController = require('../controllers/' + config.IAuthController);
+let UsuarioController = require('../controllers/' + config.IUsuarioController);
+let RelatorioController = require('../controllers/' + config.IRelatorioController);
+let IntegracaoController = require('../controllers/' + config.IIntegracaoController);
+let FrequenciaController = require('../controllers/' + config.IFrequenciaController);
+let PerfilController = require('../controllers/' + config.IPerfilController);
+let NotificacaoController = require('../controllers/' + config.INotificacaoController);
 
-// Importação dos controladores
-const authController = require('./controllers/AuthController');
-const usuarioController = require('./controllers/UsuarioController');
-const relatorioController = require('./controllers/RelatorioController');
-const integracaoController = require('./controllers/IntegracaoController');
-const frequenciaController = require('./controllers/FrequenciaController');
-const perfilController = require('./controllers/PerfilController');
-const notificacaoController = require('./controllers/NotificacaoController');
+let authController = new AuthController();
+let usuarioController = new UsuarioController();
+let relatorioController = new RelatorioController();
+let integracaoController = new IntegracaoController();
+let frequenciaController = new FrequenciaController();
+let perfilController = new PerfilController();
+let notificacaoController = new NotificacaoController();
 
-
-
-class Routes extends IRoutes{
-
-  constructor() {   
+class Routes extends IRoutes {
+  constructor() {
     super();
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(express.static('public'));
+    app.use(cors());
+  }
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));  
-} // finaliza construtor
-
-  get(){
-    
-    // Rotas de Gestor
-    app.get('/gestores/usuarios', usuarioController.getAllUsuarios);
-    app.get('/gestores/usuarios/:id', usuarioController.getUsuarioById);
-    app.put('/gestores/usuarios/:id', usuarioController.updateUsuario);
-    app.delete('/gestores/usuarios/:id', usuarioController.deleteUsuario);
-    app.get('/gestores/frequencia', frequenciaController.getFrequencia);
-    app.get('/gestores/relatorios', relatorioController.getRelatorios);
-    app.post('/gestores/relatorios', relatorioController.createRelatorio);
-   
-    app.get('/gestores/integracao/status', integracaoController.getStatus);
-    app.get('/gestores/notificacoes', notificacaoController.getNotificacoesGestor);
-
-    // Rotas de Funcionário
-    
-    app.get('/funcionarios/perfil/:id', perfilController.getPerfil);
-    app.put('/funcionarios/perfil/:id', perfilController.updatePerfil);
-    app.get('/funcionarios/notificacoes', notificacaoController.getNotificacoesFuncionario);
-
-    // Rota principal
+  get() {
     app.get('/', (req, res) => {
-      res.send('Alô REST API!!!!');
+      res.send('Rest API SGPT');
     });
 
-
-  }
-  post(){
-    // Rotas de Autenticação
-    app.post('/gestores/login', authController.loginGestor);
-    app.post('/funcionarios/login', authController.loginFuncionario);
-
-    // Rotas de Gestor
-    app.post('/gestores/usuarios', usuarioController.createUsuario);
-    app.post('/gestores/integracao', integracaoController.integrar);
-
-    // Rotas de Funcionário
-    app.post('/funcionarios/frequencia', frequenciaController.registrarFrequencia);
-
+    app.get('/gestores/login', (req, res) => authController.loginGestor(req, res));
+    app.get('/funcionarios/login', (req, res) => authController.loginFuncionario(req, res));
+    app.get('/gestores/usuarios', (req, res) => usuarioController.listarFuncionarios(req, res));
+    app.get('/gestores/usuarios/:id', (req, res) => usuarioController.getUsuario(req, res));
+    app.get('/gestores/usuarios/cargo/:cargo', (req, res) => usuarioController.listarPorCargo(req, res));
+    app.get('/gestores/relatorios', (req, res) => relatorioController.getRelatorios(req, res));
+    app.get('/gestores/integracao', (req, res) => integracaoController.integrar(req, res));
+    app.get('/gestores/notificacoes', (req, res) => notificacaoController.getNotificacoesGestor(req, res));
+    app.get('/funcionarios/frequencia', (req, res) => frequenciaController.getFrequencia(req, res));
+    app.get('/funcionarios/perfil', (req, res) => perfilController.getPerfil(req, res));
+    app.get('/funcionarios/notificacoes', (req, res) => notificacaoController.getNotificacoesFuncionario(req, res));
   }
 
-  listen(){
-    // Inicialização do servidor
-    app.listen(3000, () => console.log('Servidor iniciado na porta 3000'));
-     }
+  post() {
+    app.post('/gestores/usuarios', (req, res) => usuarioController.cadastrarFuncionario(req, res));
+    app.post('/gestores/relatorios', (req, res) => relatorioController.createRelatorio(req, res));
+    app.post('/gestores/frequencia', (req, res) => frequenciaController.registrarFrequencia(req, res));
+    app.post('/funcionarios/perfil/imagem', (req, res) => perfilController.adicionarImagemPerfil(req, res));
+    app.post('/gestores/notificacoes/funcionario', (req, res) => notificacaoController.enviarMensagemParaFuncionario(req, res));
+    app.post('/gestores/notificacoes/todos', (req, res) => notificacaoController.enviarMensagemParaTodos(req, res));
+  }
 
+  put() {
+    app.put('/gestores/usuarios/:id', (req, res) => usuarioController.editarFuncionario(req, res));
+  }
+
+  delete() {
+    app.delete('/gestores/usuarios/:id', (req, res) => usuarioController.deletarFuncionario(req, res));
+  }
+
+  listen() {
+    app.listen(3000, () => console.log('server iniciado'));
+  }
 }
+
 module.exports = Routes;

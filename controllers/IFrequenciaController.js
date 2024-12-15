@@ -1,6 +1,10 @@
 class IFrequenciaController {
-  constructor(){}
-  registrarFrequencia(){}
-  
+  constructor() {}
+  registrarFrequencia() {}
+  getFrequencia() {}
+  getFrequenciaById() {}
+  updateFrequencia() {}
+  deleteFrequencia() {}
 }
+
 module.exports = IFrequenciaController;

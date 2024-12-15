@@ -1,6 +1,10 @@
 class IFrequenciaControllerDAO {
-  constructor(){}
-  registrarFrequencia(){}
+  constructor() {}
+  registrarFrequencia() {}
+  getFrequencia() {}
+  getFrequenciaById() {}
+  updateFrequencia() {}
+  deleteFrequencia() {}
 
 }
 module.exports = IFrequenciaControllerDAO;

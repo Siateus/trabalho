@@ -1,6 +1,13 @@
 class INotificacaoController {
-  constructor(){}
-  getNotificacoesGestor(){}
-  getNotificacoesFuncionario(){}
+  constructor() {}
+
+  getNotificacoesGestor() {}
+
+  getNotificacoesFuncionario() {}
+
+  enviarMensagemParaFuncionario() {}
+
+  enviarMensagemParaTodos() {}
 }
+
 module.exports = INotificacaoController;
