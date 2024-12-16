@@ -27,8 +27,9 @@ class UsuarioController extends IUsuarioController {
     let users = await usuarioDao.listarPorCargo(req);
     return res.json(users);
   }
-
+  
   async deletarFuncionario(req, res) {
+    console.log(`Deleting user with ID: ${req.params.id}` );
     let user = await usuarioDao.deletarFuncionario(req);
     return res.json(user);
   }

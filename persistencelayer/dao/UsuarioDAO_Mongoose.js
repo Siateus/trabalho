@@ -36,7 +36,7 @@ class UsuarioDAO_mongoose extends IUsuarioDAO {
   }
 
   async deletarFuncionario(req) {
-    let user = await Usuario.findByIdAndRemove(req.params.id);
+    let user = await Usuario.findByIdAndDelete(req.params.id);
     return user;
   }
 

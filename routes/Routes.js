@@ -59,11 +59,11 @@ class Routes extends IRoutes {
   }
 
   put() {
-    app.put('/gestores/usuarios/:id', (req, res) => usuarioController.editarFuncionario(req, res));
+    app.put('/gestores/usuarios/editar/:id', (req, res) => usuarioController.editarFuncionario(req, res));
   }
 
   delete() {
-    app.delete('/gestores/usuarios/:id', (req, res) => usuarioController.deletarFuncionario(req, res));
+    app.delete('/gestores/usuarios/deletar/:id', (req, res) => usuarioController.deletarFuncionario(req, res));
   }
 
   listen() {

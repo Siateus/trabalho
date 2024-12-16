@@ -3,6 +3,8 @@ class IRoutes {
    constructor() {}
    get(){}
    post(){}
+   delete(){}
+   put(){}
    listen(){}
    
 }
