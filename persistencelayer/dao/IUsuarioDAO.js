@@ -1,6 +1,6 @@
 class IUsuarioControllerDAO {
   constructor(){}
-  getUsuario(){}
+  getPerfil(){}
   cadastrarFuncionario(){}
   listarFuncionarios(){}
   listarPorCargo(){}

@@ -30,17 +30,17 @@ class AuthDAO_mongoose extends IAuthDAO {
 
   async loginFuncionario(req) {
     try {
-      let funcionario = await Usuario.findOne({ email: req.body.email, tipo: 'funcionario' });
-      if (!funcionario) {
-        throw new Error('Funcionário não encontrado');
+      let usuario = await Usuario.findOne({ email: req.body.email });
+      if (!usuario) {
+        throw new Error('Usuário não encontrado');
       }
-      let auth = await Auth.findOne({ usuario: funcionario._id, senha: req.body.senha });
+      let auth = await Auth.findOne({ usuario: usuario._id, senha: req.body.senha });
       if (!auth) {
         throw new Error('Senha incorreta');
       }
-      return funcionario;
+      return usuario;
     } catch (error) {
-      throw new Error('Erro ao autenticar funcionário');
+      throw new Error('Erro ao autenticar usuário');
     }
   }
 }

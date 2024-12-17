@@ -8,39 +8,29 @@ class NotificacaoController extends INotificacaoController {
     super();
   }
 
-  async getNotificacoesGestor(req, res) {
+  async criarNotificacao(req, res) {
     try {
-      let notificacoes = await notificacaoDao.getNotificacoesGestor(req);
+      let notificacoes = await notificacaoDao.criarNotificacao(req);
       return res.json(notificacoes);
     } catch (error) {
       return res.status(500).send('Erro ao obter notificações do gestor');
     }
   }
 
-  async getNotificacoesFuncionario(req, res) {
+  async listarNotificacoes(req, res) {
     try {
-      let notificacoes = await notificacaoDao.getNotificacoesFuncionario(req);
+      let notificacoes = await notificacaoDao.listarNotificacoes(req);
       return res.json(notificacoes);
     } catch (error) {
-      return res.status(500).send('Erro ao obter notificações do funcionário');
+      return res.status(500).send('Erro ao listar notificações do funcionário');
     }
   }
-
-  async enviarMensagemParaFuncionario(req, res) {
+  async deletarNotificacao(req, res) {
     try {
-      let mensagem = await notificacaoDao.enviarMensagemParaFuncionario(req);
-      return res.json(mensagem);
+      let notificacoes = await notificacaoDao.deletarNotificacao(req);
+      return res.json(notificacoes);
     } catch (error) {
-      return res.status(500).send('Erro ao enviar mensagem para o funcionário');
-    }
-  }
-
-  async enviarMensagemParaTodos(req, res) {
-    try {
-      let mensagem = await notificacaoDao.enviarMensagemParaTodos(req);
-      return res.json(mensagem);
-    } catch (error) {
-      return res.status(500).send('Erro ao enviar mensagem para todos os funcionários');
+      return res.status(500).send('Erro ao deletar notificações do funcionário');
     }
   }
 }

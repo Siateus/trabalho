@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const IUsuarioDAO = require('./IUsuarioDAO.js');
 const Usuario = require('../models/Usuario.js');
+const Auth = require('../models/Auth.js');
 
 class UsuarioDAO_mongoose extends IUsuarioDAO {
   constructor(){
@@ -11,16 +12,54 @@ class UsuarioDAO_mongoose extends IUsuarioDAO {
     });
   }
 
-  async getUsuario(req) {
-    let user = await Usuario.findById(req.params.id);
-    return user;
+  calcularIdade(dataNascimento) {
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+      idade--;
+    }
+    return idade;
+  }
+
+  async getPerfil(req) {
+    try {
+      const usuario = await Usuario.findById(req.params.id);
+      if (!usuario) {
+        throw new Error('Usuário não encontrado');
+      }
+
+      const perfil = {
+        nome: usuario.nome,
+        cpf: usuario.cpf,
+        dataNascimento: usuario.dataNascimento,
+        email: usuario.email,
+        cargo: usuario.cargo,
+        status: usuario.status,
+        tipo: usuario.tipo,
+        imagemPerfil: usuario.imagemPerfil
+      };
+
+      return perfil;
+    } catch (error) {
+      console.error(error); // Adicionando log de erro para depuração
+      throw new Error('Erro ao obter perfil');
+    }
   }
 
   async cadastrarFuncionario(req) {
     try {
-      const user = await Usuario.create(req.body);
+      const idade = this.calcularIdade(req.body.dataNascimento);
+      const user = await Usuario.create({ ...req.body, idade });
+
+      // Criar registro de autenticação
+      const novoAuth = new Auth({ usuario: user._id, email: user.email, senha: '12345678' });
+      await novoAuth.save();
+
       return user;
     } catch (error) {
+      console.error(error); // Adicionando log de erro para depuração
       throw new Error('Erro ao cadastrar funcionário');
     }
   }

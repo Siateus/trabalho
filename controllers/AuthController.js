@@ -10,19 +10,19 @@ class AuthController extends IAuthController {
 
   async loginGestor(req, res) {
     try {
-      let gestor = await authDao.loginGestor(req);
-      return res.json(gestor);
+      const gestor = await authDao.loginGestor(req);
+      return res.json({ message: 'Login bem-sucedido', gestor });
     } catch (error) {
-      return res.status(500).send('Erro ao autenticar gestor');
+      return res.status(500).json({ message: error.message });
     }
   }
 
   async loginFuncionario(req, res) {
     try {
-      let funcionario = await authDao.loginFuncionario(req);
-      return res.json(funcionario);
+      const usuario = await authDao.loginFuncionario(req);
+      return res.json({ message: 'Login bem-sucedido', usuario });
     } catch (error) {
-      return res.status(500).send('Erro ao autenticar funcionário');
+      return res.status(500).json({ message: error.message });
     }
   }
 }

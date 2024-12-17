@@ -1,70 +1,41 @@
 const mongoose = require('mongoose');
-const Notificacao = require('../models/Notificacao');
-const Usuario = require('../models/Usuario');
-const INotificacaoDAO = require('./INotificacaoDAO');
+const INotificacaoDAO = require('./INotificacaoDAO.js');
+const Notificacao = require('../models/Notificacao.js');
 
 class NotificacaoDAO_mongoose extends INotificacaoDAO {
-  constructor() {
+  constructor(){
     super();
-    mongoose.connect('mongodb+srv://matheus62053:pc3123@cluster0.ry71u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+    mongoose.connect('mongodb+srv://matheus62053:pc3123@cluster0.ry71u.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',{
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
   }
 
-  async getNotificacoesGestor(req) {
+  async criarNotificacao(req) {
     try {
-      const notificacoes = await Notificacao.find({ tipo: 'gestor' });
-      return notificacoes;
+      const notificacao = new Notificacao(req.body);
+      await notificacao.save();
+      return notificacao;
     } catch (error) {
-      throw new Error('Erro ao obter notificações do gestor');
+      throw new Error('Erro ao criar notificação');
     }
   }
 
-  async getNotificacoesFuncionario(req) {
+  async listarNotificacoes(req) {
     try {
-      const notificacoes = await Notificacao.find({ tipo: 'funcionario' });
+      const notificacoes = await Notificacao.find({ usuario: req.params.id });
       return notificacoes;
     } catch (error) {
-      throw new Error('Erro ao obter notificações do funcionário');
+      throw new Error('Erro ao listar notificações');
     }
   }
 
-  async enviarMensagemParaFuncionario(req) {
+  async deletarNotificacao(req) {
     try {
-      const { idFuncionario, mensagem } = req.body;
-      const funcionario = await Usuario.findById(idFuncionario);
-      if (!funcionario) {
-        throw new Error('Funcionário não encontrado');
-      }
-      const novaNotificacao = new Notificacao({
-        usuario: idFuncionario,
-        mensagem,
-        tipo: 'funcionario'
-      });
-      await novaNotificacao.save();
-      return novaNotificacao;
+      const notificacao = await Notificacao.findByIdAndDelete(req.params.id);
+      return notificacao;
     } catch (error) {
-      throw new Error('Erro ao enviar mensagem para o funcionário');
-    }
-  }
-
-  async enviarMensagemParaTodos(req) {
-    try {
-      const { mensagem } = req.body;
-      const funcionarios = await Usuario.find({ tipo: 'funcionario' });
-      const notificacoes = await Promise.all(funcionarios.map(async (funcionario) => {
-        const novaNotificacao = new Notificacao({
-          usuario: funcionario._id,
-          mensagem,
-          tipo: 'funcionario'
-        });
-        await novaNotificacao.save();
-        return novaNotificacao;
-      }));
-      return notificacoes;
-    } catch (error) {
-      throw new Error('Erro ao enviar mensagem para todos os funcionários');
+      throw new Error('Erro ao deletar notificação');
     }
   }
 }

@@ -1,12 +1,8 @@
 class INotificacaoControllerDAO {
   constructor() {}
 
-  getNotificacoesGestor() {}
-
-  getNotificacoesFuncionario() {}
-
-  enviarMensagemParaFuncionario() {}
-
-  enviarMensagemParaTodos() {}
+  criarNotificacao() {}
+  listarNotificacoes() {}
+  deletarNotificacao() {}
 }
 module.exports = INotificacaoControllerDAO;

@@ -10,55 +10,32 @@ class RelatorioController extends IRelatorioController {
 
   async gerarRelatorio(req, res) {
     try {
-      let relatorio = await relatorioDao.gerarRelatorio(req);
+      const { tipo, dataInicial, dataFinal } = req.body;
+      const relatorio = await relatorioDao.gerarRelatorio({ tipo, dataInicial, dataFinal });
       return res.json(relatorio);
     } catch (error) {
-      return res.status(500).send('Erro ao gerar relatório');
+      return res.status(500).json({ message: 'Erro ao gerar relatório' });
     }
   }
 
-  async createRelatorio(req, res) {
+  async listarRelatorios(req, res) {
     try {
-      let relatorio = await relatorioDao.createRelatorio(req);
-      return res.json(relatorio);
-    } catch (error) {
-      return res.status(500).send('Erro ao criar relatório');
-    }
-  }
-
-  async getRelatorios(req, res) {
-    try {
-      let relatorios = await relatorioDao.getRelatorios(req);
+      const relatorios = await relatorioDao.listarRelatorios();
       return res.json(relatorios);
     } catch (error) {
-      return res.status(500).send('Erro ao obter relatórios');
+      return res.status(500).json({ message: 'Erro ao listar relatórios' });
     }
   }
 
-  async getRelatorioById(req, res) {
+  async deletarRelatorio(req, res) {
     try {
-      let relatorio = await relatorioDao.getRelatorioById(req);
-      return res.json(relatorio);
+      const relatorio = await relatorioDao.deletarRelatorio(req.params.id);
+      if (!relatorio) {
+        return res.status(404).json({ message: 'Relatório não encontrado' });
+      }
+      return res.json({ message: 'Relatório deletado com sucesso' });
     } catch (error) {
-      return res.status(500).send('Erro ao obter relatório');
-    }
-  }
-
-  async updateRelatorio(req, res) {
-    try {
-      let relatorio = await relatorioDao.updateRelatorio(req);
-      return res.json(relatorio);
-    } catch (error) {
-      return res.status(500).send('Erro ao atualizar relatório');
-    }
-  }
-
-  async deleteRelatorio(req, res) {
-    try {
-      let relatorio = await relatorioDao.deleteRelatorio(req);
-      return res.json(relatorio);
-    } catch (error) {
-      return res.status(500).send('Erro ao excluir relatório');
+      return res.status(500).json({ message: 'Erro ao deletar relatório' });
     }
   }
 }

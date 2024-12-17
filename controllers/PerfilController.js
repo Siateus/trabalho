@@ -29,7 +29,7 @@ class PerfilController extends IPerfilController {
   async adicionarImagemPerfil(req, res) {
     try {
       let perfil = await perfilDao.adicionarImagemPerfil(req);
-      return res.json(perfil);
+      return res.json({ messagem: 'Imagem de perfil adicionada com sucesso' });
     } catch (error) {
       return res.status(500).send('Erro ao adicionar imagem de perfil');
     }

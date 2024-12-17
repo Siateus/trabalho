@@ -7,6 +7,7 @@ const config = {
   "IFrequenciaController": "FrequenciaController.js",
   "IPerfilController": "PerfilController.js",
   "INotificacaoController": "NotificacaoController.js",
+  "IMensagemController" : "MensagemController",
   "IUsuarioDAO": "UsuarioDAO_Mongoose.js",
   "IRelatorioDAO": "RelatorioDAO_Mongoose.js",
   "IIntegracaoDAO": "IntegracaoDAO_Mongoose.js",
@@ -14,8 +15,7 @@ const config = {
   "INotificacaoDAO": "NotificacaoDAO_Mongoose.js",
   "IAuthDAO": "AuthDAO_Mongoose.js",
   "IPerfilDAO": "PerfilDAO_Mongoose.js",
-  
-
+  "IMensagemDAO": "MensagemDAO_Mongoose.js",
 };
 
 module.exports = config;

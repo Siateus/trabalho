@@ -1,10 +1,7 @@
 class IRelatorioControllerDAO {
   constructor() {}
-    gerarRelatorio() {}
-    createRelatorio() {}
-    getRelatorios() {}
-    getRelatorioById() {}
-    updateRelatorio() {}
-    deleteRelatorio() {}
+  gerarRelatorio() {}
+  listarRelatorio() {}
+  deletarRelatorio() {}
 }
 module.exports = IRelatorioControllerDAO;

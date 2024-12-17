@@ -1,11 +1,8 @@
 class IRelatorioController {
   constructor() {}
   gerarRelatorio() {}
-  createRelatorio() {}
-  getRelatorios() {}
-  getRelatorioById() {}
-  updateRelatorio() {}
-  deleteRelatorio() {}
+  listarRelatorio() {}
+  deletarRelatorio() {}
 }
 
 module.exports = IRelatorioController;

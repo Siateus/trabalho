@@ -12,6 +12,7 @@ let RelatorioController = require('../controllers/' + config.IRelatorioControlle
 let IntegracaoController = require('../controllers/' + config.IIntegracaoController);
 let FrequenciaController = require('../controllers/' + config.IFrequenciaController);
 let PerfilController = require('../controllers/' + config.IPerfilController);
+let MensagemController = require('../controllers/' + config.IMensagemController);
 let NotificacaoController = require('../controllers/' + config.INotificacaoController);
 
 let authController = new AuthController();
@@ -20,6 +21,7 @@ let relatorioController = new RelatorioController();
 let integracaoController = new IntegracaoController();
 let frequenciaController = new FrequenciaController();
 let perfilController = new PerfilController();
+let mensagemController = new MensagemController();
 let notificacaoController = new NotificacaoController();
 
 class Routes extends IRoutes {
@@ -32,42 +34,99 @@ class Routes extends IRoutes {
   }
 
   get() {
-    app.get('/', (req, res) => {
+    app.get('/', function(req, res) {
       res.send('Rest API SGPT');
     });
 
-    app.get('/gestores/login', (req, res) => authController.loginGestor(req, res));
-    app.get('/funcionarios/login', (req, res) => authController.loginFuncionario(req, res));
-    app.get('/gestores/usuarios', (req, res) => usuarioController.listarFuncionarios(req, res));
-    app.get('/gestores/usuarios/:id', (req, res) => usuarioController.getUsuario(req, res));
-    app.get('/gestores/usuarios/cargo/:cargo', (req, res) => usuarioController.listarPorCargo(req, res));
-    app.get('/gestores/relatorios', (req, res) => relatorioController.getRelatorios(req, res));
-    app.get('/gestores/integracao', (req, res) => integracaoController.integrar(req, res));
-    app.get('/gestores/notificacoes', (req, res) => notificacaoController.getNotificacoesGestor(req, res));
-    app.get('/funcionarios/frequencia', (req, res) => frequenciaController.getFrequencia(req, res));
-    app.get('/funcionarios/perfil', (req, res) => perfilController.getPerfil(req, res));
-    app.get('/funcionarios/notificacoes', (req, res) => notificacaoController.getNotificacoesFuncionario(req, res));
+   
+    app.get('/gestores/usuarios', function(req, res) {
+      usuarioController.listarFuncionarios(req, res);
+    });
+    app.get('/gestores/usuarios/:id', function(req, res) {
+      usuarioController.getUsuario(req, res);
+    });
+    app.get('/gestores/usuarios/cargo/:cargo', function(req, res) {
+      usuarioController.listarPorCargo(req, res);
+    });
+    app.get('/gestores/notificacoes', function(req, res) {
+      notificacaoController.getNotificacoesGestor(req, res);
+    });
+    app.get('/funcionarios/perfil/:id', function(req, res) {
+      usuarioController.getPerfil(req, res);
+    });
+    app.get('/gestores/perfil/:id', function(req, res) {
+      usuarioController.getPerfil(req, res);
+    });
+    app.get('/funcionarios/notificacoes/:id', function(req, res) {
+      notificacaoController.listarNotificacoes(req, res);
+    });
+    app.get('/gestores/mensagens/exibir', function(req, res) {
+      mensagemController.listarMensagens(req, res);
+    });
+    
+    //---------Rotas em construção------------
+    /*app.get('/funcionarios/frequencia', function(req, res) {
+      frequenciaController.getFrequencia(req, res);
+    });
+    app.get('/gestores/relatorios/gerar', function(req, res) {
+      relatorioController.getRelatorios(req, res);
+    });
+    app.get('/gestores/integracao', function(req, res) {
+      integracaoController.integrar(req, res);
+    });*/
   }
 
   post() {
-    app.post('/gestores/usuarios', (req, res) => usuarioController.cadastrarFuncionario(req, res));
-    app.post('/gestores/relatorios', (req, res) => relatorioController.createRelatorio(req, res));
-    app.post('/gestores/frequencia', (req, res) => frequenciaController.registrarFrequencia(req, res));
-    app.post('/funcionarios/perfil/imagem', (req, res) => perfilController.adicionarImagemPerfil(req, res));
-    app.post('/gestores/notificacoes/funcionario', (req, res) => notificacaoController.enviarMensagemParaFuncionario(req, res));
-    app.post('/gestores/notificacoes/todos', (req, res) => notificacaoController.enviarMensagemParaTodos(req, res));
+    app.post('/gestores/login', function(req, res) {
+      authController.loginGestor(req, res);
+    });
+    app.post('/funcionarios/login', function(req, res) {
+      authController.loginFuncionario(req, res);
+    });
+    app.post('/gestores/usuarios', function(req, res) {
+      usuarioController.cadastrarFuncionario(req, res);
+    });
+    app.post('/gestores/relatorios', function(req, res) {
+      relatorioController.createRelatorio(req, res);
+    });
+    app.post('/funcionario/frequencia', function(req, res) {
+      frequenciaController.registrarFrequencia(req, res);
+    });
+    app.post('/gestores/mensagens/funcionario/:id', function(req, res) {
+      mensagemController.enviarMensagemParaFuncionario(req, res);
+    });
+    app.post('/gestores/mensagens/todos', function(req, res) {
+      notificacaoController.enviarMensagemParaTodos(req, res);
+    });
+    
+    // ---------------rotas em construção---------------------
+    /*app.post('/funcionarios/perfil/imagem', function(req, res) {
+    //   perfilController.adicionarImagemPerfil(req, res);
+    // }); */  
   }
 
   put() {
-    app.put('/gestores/usuarios/editar/:id', (req, res) => usuarioController.editarFuncionario(req, res));
+    app.put('/gestores/usuarios/editar/:id', function(req, res) {
+      usuarioController.editarFuncionario(req, res);
+    });
   }
 
   delete() {
-    app.delete('/gestores/usuarios/deletar/:id', (req, res) => usuarioController.deletarFuncionario(req, res));
+    app.delete('/gestores/usuarios/deletar/:id', function(req, res) {
+      usuarioController.deletarFuncionario(req, res);
+    });
+    app.delete('/gestores/mensagens/deletar:id', function(req, res) {
+      mensagemController.deletarMensagem(req, res);
+    });
+    app.delete('/gestores/notificacoes/:id', function(req, res) {
+      notificacaoController.deletarNotificacao(req, res);
+    });
   }
 
   listen() {
-    app.listen(3000, () => console.log('server iniciado'));
+    app.listen(3000, function() {
+      console.log('server iniciado');
+    });
   }
 }
 

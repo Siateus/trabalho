@@ -1,6 +1,6 @@
 class IUsuarioController {
   constructor(){}
-  getUsuario(){}
+  getPerfil(){}
   cadastrarFuncionario(){}
   listarFuncionarios(){}
   listarPorCargo(){}
