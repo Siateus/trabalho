@@ -241,7 +241,7 @@
 
 ### Resposta:
 
-![Print Notificações](https:/media.discordapp.net/attachments/851146326326116404/1318684805558435921/Captura_de_tela_2024-12-17_171745.png?ex=6763386d&is=6761e6ed&hm=5c2f5b920fdcdac27331d2a9742c27c8ccedee13f306cb2867bdab015d97ada7&=&format=webp&quality=lossless&width=745&height=425)
+![Print Notificações](https://media.discordapp.net/attachments/851146326326116404/1318684805558435921/Captura_de_tela_2024-12-17_171745.png?ex=6763386d&is=6761e6ed&hm=5c2f5b920fdcdac27331d2a9742c27c8ccedee13f306cb2867bdab015d97ada7&=&format=webp&quality=lossless&width=745&height=425)
 
 ```json
 [{
