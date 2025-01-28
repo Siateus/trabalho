@@ -1,6 +1,6 @@
 class IAuthControllerDAO {
   constructor(){}
-  loginGestor(){}
-  loginFuncionario(){}
+  logarGestor(){}
+  logarFuncionario(){}
 }
 module.exports = IAuthControllerDAO;
