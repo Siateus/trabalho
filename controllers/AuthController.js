@@ -18,7 +18,7 @@ class AuthController extends IAuthController {
     if (result.erro) {
       return res.status(400).json({ message: result.erro });
     }
-    console.log({result});
+  
     // Se o login foi bem-sucedido, retorna o token
     res.cookie('token', result);
     res.status(200).json({ message: 'Login bem-sucedido' });

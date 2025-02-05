@@ -31,16 +31,10 @@ class FrequenciaDAO_mongoose extends IFrequenciaDAO {
   }
 
   async getFrequenciaById(req) {
-    try {
-      const { id } = req.params;
-      const frequencia = await Frequencia.findById(id);
-      if (!frequencia) {
-        throw new Error('Frequência não encontrada');
-      }
-      return frequencia;
-    } catch (error) {
-      throw new Error('Erro ao obter frequência');
-    }
+    
+    let frequencias = await Frequencia.find({ funcionario: req.params.id });
+    return frequencias;
+
   }
 
   async updateFrequencia(req) {

@@ -45,7 +45,7 @@
 
 
 ## Cadastrar Usuário
-**POST** `api/gestores/usuarios`
+**POST** `api/funcionarios/cadastrar`
 
 ### Entrada:
 
@@ -97,7 +97,7 @@
 ---
 
 ## Listar Usuários
-**GET** `api/gestores/usuarios`
+**GET** `api/funcionarios`
 
 ### Resposta:
 
@@ -133,7 +133,7 @@
 ---
 
 ## Listar Usuários por Cargo
-**GET** `api/gestores/usuarios/cargo/Gerente`
+**GET** `api/funcionarios/cargo/:cargo`
 
 ### Resposta:
 ```json
@@ -164,7 +164,7 @@
 ---
 
 ## Editar Usuário
-**PUT** `api/gestores/usuarios/editar/675f7554fdb3817a5f9c924c`
+**PUT** `api/funcionarios/editar/:id`
 
 ### Entrada:
 
@@ -198,7 +198,7 @@
 ---
 
 ## Deletar Usuário
-**DELETE** `api/gestores/usuarios/deletar/675f7554fdb3817a5f9c924c`
+**DELETE** `api/funcioanrios/deletar/:id`
 
 ### Resposta:
 ```json
@@ -209,7 +209,7 @@
 ---
 
 ## Enviar Mensagem
-**POST** `api/gestores/mensagens/funcionario/6761cab88ff8425106b8e83e`
+**POST** `api/mensagens/funcionario/:id`
 
 ### Entrada:
 
@@ -237,7 +237,7 @@
 ---
 
 ## Listar Notificações
-**GET** `api/funcionarios/notificacoes/:id`
+**GET** `api/notificacoes/:id`
 
 ### Resposta:
 
@@ -271,7 +271,7 @@
 ---
 
 ## Listar Mensagens
-**GET** `api/gestores/mensagens/exibir`
+**GET** `api/mensagens/exibir`
 
 ### Exemplo de Saída:
 ```json
@@ -293,11 +293,9 @@
 ``` 
 ---
 
-### Exemplo Rotas  Perfil:
+## Exemplo Rotas  Perfil:
 
-**GET** `api/funcionarios/perfil/:id`
-
-**GET** `api/gestores/perfil/:id`
+**GET** `api/perfil/:id`
 
 ## Resposta :
 
@@ -315,3 +313,68 @@
 }
 ```
 ![Print tela de Perfil](/imagens/perfil.png)
+
+---
+
+## Frequencia
+
+**GET** `/api/frequencia/:id`
+
+## Resposta :
+``` Json
+{
+		"_id": "67a295d63e866cf859ebd547",
+		"funcionario": "67982c633ec199ee598afe88",
+		"data": "2025-02-01T00:00:00.000Z",
+		"horaEntrada": "08:00",
+		"horaSaida": "17:00",
+		"horasTrabalhadas": 9,
+		"__v": 0
+	},
+	{
+		"_id": "67a295d63e866cf859ebd548",
+		"funcionario": "67982c633ec199ee598afe88",
+		"data": "2025-02-02T00:00:00.000Z",
+		"horaEntrada": "08:00",
+		"horaSaida": "17:00",
+		"horasTrabalhadas": 9,
+		"__v": 0
+	},
+	{
+		"_id": "67a295d63e866cf859ebd549",
+		"funcionario": "67982c633ec199ee598afe88",
+		"data": "2025-02-03T00:00:00.000Z",
+		"horaEntrada": "08:00",
+		"horaSaida": "17:00",
+		"horasTrabalhadas": 9,
+		"__v": 0
+	},
+	{
+		"_id": "67a295d63e866cf859ebd54a",
+		"funcionario": "67982c633ec199ee598afe88",
+		"data": "2025-02-04T00:00:00.000Z",
+		"horaEntrada": "08:00",
+		"horaSaida": "17:00",
+		"horasTrabalhadas": 9,
+		"__v": 0
+	},
+	{
+		"_id": "67a295d63e866cf859ebd54b",
+		"funcionario": "67982c633ec199ee598afe88",
+		"data": "2025-02-05T00:00:00.000Z",
+		"horaEntrada": "08:00",
+		"horaSaida": "17:00",
+		"horasTrabalhadas": 9,
+		"__v": 0
+	}
+
+```
+![Print historico](imagens/Historico 1.png)
+
+**GET** `/api/frequencia`
+``` Json
+
+
+
+```
+
