@@ -318,6 +318,8 @@
 
 ## Frequencia
 
+**GET** `/api/frequencia`
+
 **GET** `/api/frequencia/:id`
 
 ## Resposta :
@@ -369,12 +371,7 @@
 	}
 
 ```
-![Print historico](imagens/Historico 1.png)
 
-**GET** `/api/frequencia`
-``` Json
+![Print tela de Perfil](/imagens/Historico.png)
 
-
-
-```
 
