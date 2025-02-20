@@ -67,7 +67,12 @@ class Routes extends IRoutes {
             authController.deslogar(req, res);
         });
 
-        
+
+
+        app.get('/api/perfillogado', authController.logado(['funcionario', 'gestor']), function(req, res) {
+            usuarioController.getPerfil(req, res);
+        });
+
 
          // Rotas para funcionários
          app.get('/api/perfil/:id', authController.logado(['funcionario', 'gestor']), function(req, res) {

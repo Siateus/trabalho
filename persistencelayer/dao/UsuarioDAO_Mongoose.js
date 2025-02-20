@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const IUsuarioDAO = require('./IUsuarioDAO.js');
 const Usuario = require('../models/Usuario.js');
 const Auth = require('../models/Auth.js');
+const jwt = require('jsonwebtoken');
 
 class UsuarioDAO_mongoose extends IUsuarioDAO {
   constructor(){
@@ -23,30 +24,33 @@ class UsuarioDAO_mongoose extends IUsuarioDAO {
     return idade;
   }
 
-  async getPerfil(req) {
-    try {
-      const usuario = await Usuario.findById(req.params.id);
-      if (!usuario) {
-        throw new Error('Usuário não encontrado');
-      }
 
-      const perfil = {
-        nome: usuario.nome,
-        cpf: usuario.cpf,
-        dataNascimento: usuario.dataNascimento,
-        email: usuario.email,
-        cargo: usuario.cargo,
-        status: usuario.status,
-        tipo: usuario.tipo,
-        imagemPerfil: usuario.imagemPerfil
-      };
 
-      return perfil;
-    } catch (error) {
-      console.error(error); // Adicionando log de erro para depuração
-      throw new Error('Erro ao obter perfil');
+async getPerfil(userId) { // Alterado para aceitar userId como argumento
+  try {
+    const usuario = await Usuario.findById(userId);
+    if (!usuario) {
+      throw new Error('Usuário não encontrado');
     }
+
+    const perfil = {
+      nome: usuario.nome,
+      cpf: usuario.cpf,
+      dataNascimento: usuario.dataNascimento,
+      email: usuario.email,
+      cargo: usuario.cargo,
+      status: usuario.status,
+      tipo: usuario.tipo,
+      imagemPerfil: usuario.imagemPerfil
+    };
+
+    return perfil;
+  } catch (error) {
+    console.error(error); 
+    throw new Error('Erro ao obter perfil');
   }
+}
+  
 
   async cadastrarFuncionario(req) {
     try {

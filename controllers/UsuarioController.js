@@ -2,6 +2,7 @@ const IUsuarioController = require('./IUsuarioController');
 const config = require('../config');
 const UsuarioDAO = require('../persistencelayer/dao/' + config.IUsuarioDAO);
 let usuarioDao = new UsuarioDAO();
+const jwt = require('jsonwebtoken');
 
 class UsuarioController extends IUsuarioController {
   constructor() {
@@ -10,16 +11,30 @@ class UsuarioController extends IUsuarioController {
 
   async getPerfil(req, res) {
     try {
-      let user = await usuarioDao.getPerfil(req);
+      let userId;
+
+      if (req.params.id) {
+        userId = req.params.id;
+      } else {
+        const auth = req.cookies.token || null;
+        if (!auth) {
+          return res.status(401).json({ message: 'Token não fornecido' });
+        }
+        const Token = jwt.verify(auth, 'senhaParaProtegerOToken');
+        userId = Token.id;
+      }
+
+      let user = await usuarioDao.getPerfil(userId); // Passe o userId diretamente
       if (!user) {
         return res.status(404).json({ message: 'Usuário não encontrado' });
       }
       return res.json(user);
     } catch (error) {
+      console.error(error);
       return res.status(500).json({ message: 'Erro ao obter usuário' });
     }
   }
-
+  
   async cadastrarFuncionario(req, res) {
     try {
       if (!validaCPF(req.body.cpf)) {
