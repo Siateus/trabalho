@@ -141,7 +141,7 @@ class Routes extends IRoutes {
     }
 
     listen() {
-        app.listen(3001, function() {
+        app.listen(3000, function() {
             console.log('server iniciado');
         });
     }
