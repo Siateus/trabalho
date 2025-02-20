@@ -34,7 +34,12 @@ class Routes extends IRoutes {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(express.static('public'));
-        app.use(cors());
+        app.use(cors({
+            origin: ['http://localhost:3000', 'http://localhost:19006', 'http://192.168.1.X:19006'], // Adicione suas origens
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+          }));
         app.use(cookieParser());
         app.use(bodyParser.json());
     }
