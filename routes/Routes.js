@@ -42,6 +42,13 @@ class Routes extends IRoutes {
           }));
         app.use(cookieParser());
         app.use(bodyParser.json());
+        app.options('*', (req, res) => {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+            res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
+            res.sendStatus(200);
+          });
+          
     }
     
 
