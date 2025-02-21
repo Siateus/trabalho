@@ -1,7 +1,7 @@
 
 const INotificacaoController = require('./INotificacaoController');
-const NotificacaoDAO = require('../persistencelayer/dao/' + config.INotificacaoDAO);
 const config = require('../config');
+const NotificacaoDAO = require('../persistencelayer/dao/' + config.INotificacaoDAO);
 
 const notificacaoDao = new NotificacaoDAO();
 
