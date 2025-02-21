@@ -2,7 +2,7 @@ const IUsuarioController = require('./IUsuarioController');
 const config = require('../config');
 const UsuarioDAO = require('../persistencelayer/dao/' + config.IUsuarioDAO);
 let usuarioDao = new UsuarioDAO();
-const Auth = require('../models/Auth.js');
+const Auth = require('../persistencelayer/models/Auth.js');
 const jwt = require('jsonwebtoken');
 
 class UsuarioController extends IUsuarioController {
