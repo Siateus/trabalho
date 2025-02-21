@@ -37,17 +37,66 @@ class UsuarioController extends IUsuarioController {
   
   async cadastrarFuncionario(req, res) {
     try {
-      if (!validaCPF(req.body.cpf)) {
-        return res.status(400).json({ message: 'CPF inválido' });
+      // Data validation
+      const errors = [];
+      
+      if (!req.body.cpf) {
+        errors.push('CPF é obrigatório');
+      } else if (!validaCPF(req.body.cpf)) {
+        errors.push('CPF inválido');
       }
-      if (!validaEmail(req.body.email)) {
-        return res.status(400).json({ message: 'E-mail inválido' });
+
+      if (!req.body.email) {
+        errors.push('Email é obrigatório');
+      } else if (!validaEmail(req.body.email)) {
+        errors.push('Email inválido');
       }
-      let user = await usuarioDao.cadastrarFuncionario(req);
-      return res.json({ message: 'Funcionário cadastrado com sucesso', user });
+
+      if (!req.body.nome || req.body.nome.trim().length === 0) {
+        errors.push('Nome é obrigatório');
+      }
+
+      if (!req.body.cargo || req.body.cargo.trim().length === 0) {
+        errors.push('Cargo é obrigatório');
+      }
+
+      // If there are validation errors, return them
+      if (errors.length > 0) {
+        return res.status(400).json({ 
+          message: 'Erros de validação',
+          errors: errors 
+        });
+      }
+
+      // Format the data before sending to DAO
+      const funcionarioData = {
+        ...req.body,
+        nome: req.body.nome.trim(),
+        email: req.body.email.toLowerCase().trim(),
+        cpf: req.body.cpf.replace(/\D/g, ''),
+        dataNascimento: formatarData(req.body.dataNascimento),
+        status: req.body.status || 'ativo',
+        tipo: req.body.tipo || 'funcionario'
+      };
+
+      const user = await usuarioDao.cadastrarFuncionario(funcionarioData);
+      return res.json({ 
+        message: 'Funcionário cadastrado com sucesso', 
+        user 
+      });
+
     } catch (error) {
-      console.error(error); // Adicionando log de erro para depuração
-      return res.status(500).json({ message: 'Erro ao cadastrar funcionário' });
+      console.error('Erro no controller:', error);
+      if (error.name === 'ValidationError') {
+        return res.status(400).json({ 
+          message: 'Erro de validação',
+          errors: Object.values(error.errors).map(err => err.message)
+        });
+      }
+      return res.status(500).json({ 
+        message: 'Erro ao cadastrar funcionário',
+        error: error.message 
+      });
     }
   }
 
@@ -94,7 +143,7 @@ class UsuarioController extends IUsuarioController {
   }
 }
 function validaEmail(email) {
-  var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 }
 function validaCPF(cpf) {
@@ -145,6 +194,25 @@ function validaCPF(cpf) {
     return false
 
   return true
+}
+
+function formatarData(data) {
+  if (!data) return null;
+  
+  // If already a Date object, return it
+  if (data instanceof Date) return data;
+  
+  // If in DD/MM/YYYY format, convert to YYYY-MM-DD
+  if (typeof data === 'string') {
+    if (data.includes('/')) {
+      const [dia, mes, ano] = data.split('/');
+      return new Date(ano, mes - 1, dia);
+    }
+    // Try to parse the date string
+    return new Date(data);
+  }
+  
+  return null;
 }
 
 module.exports = UsuarioController;

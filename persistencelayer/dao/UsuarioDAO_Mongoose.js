@@ -14,15 +14,26 @@ class UsuarioDAO_mongoose extends IUsuarioDAO {
   }
 
   calcularIdade(dataNascimento) {
+    if (!dataNascimento) return null;
+    
     const hoje = new Date();
     const nascimento = new Date(dataNascimento);
+    
+    // Validate date
+    if (isNaN(nascimento.getTime())) {
+      throw new Error('Data de nascimento inválida');
+    }
+    
     let idade = hoje.getFullYear() - nascimento.getFullYear();
     const mes = hoje.getMonth() - nascimento.getMonth();
+    
     if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
       idade--;
     }
+    
     return idade;
   }
+
 
 
 
@@ -52,22 +63,38 @@ async getPerfil(userId) {
 }
   
 
-  async cadastrarFuncionario(req) {
-    try {
-      const idade = this.calcularIdade(req.body.dataNascimento);
-      const user = await Usuario.create({ ...req.body, idade });
+async cadastrarFuncionario(dados) {
+  try {
+    // Calculate age if birth date is provided
+    const idade = dados.dataNascimento ? 
+      this.calcularIdade(dados.dataNascimento) : 
+      null;
 
-      // Criar registro de autenticação
-      const novoAuth = new Auth({ usuario: user._id, email: user.email, senha: '12345678' });
-      await novoAuth.save();
+    // Create user with calculated age
+    const user = await Usuario.create({
+      ...dados,
+      idade,
+      dataCadastro: new Date()
+    });
 
-      return user;
-    } catch (error) {
-      console.error(error); // Adicionando log de erro para depuração
-      throw new Error('Erro ao cadastrar funcionário');
+    // Create auth record with default password
+    const novoAuth = new Auth({
+      usuario: user._id,
+      email: user.email,
+      senha: '12345678' // Consider using a more secure default or requiring password
+    });
+    await novoAuth.save();
+
+    return user;
+
+  } catch (error) {
+    console.error('Erro no DAO:', error);
+    if (error.name === 'ValidationError') {
+      throw error; // Let the controller handle mongoose validation errors
     }
+    throw new Error(error.message || 'Erro ao cadastrar funcionário');
   }
-
+}
   async listarFuncionarios(req) {
     let users = await Usuario.find();
     return users;
