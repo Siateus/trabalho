@@ -22,7 +22,7 @@ class AuthController extends IAuthController {
     // Se o login foi bem-sucedido, retorna o token
     res.cookie('token', result);
     res.status(200).json({ message: 'Login bem-sucedido',
-      id: result.id
+      token: result
     });
   }
 
