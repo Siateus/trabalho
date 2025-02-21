@@ -1,7 +1,7 @@
 const IUsuarioController = require('./IUsuarioController');
 const config = require('../config');
 const UsuarioDAO = require('../persistencelayer/dao/' + config.IUsuarioDAO);
-const NotificacaoController = require('./NotificacaoController');
+const notificacaoController = new NotificacaoController(); 
 let usuarioDao = new UsuarioDAO();
 const jwt = require('jsonwebtoken');
 
@@ -137,7 +137,7 @@ class UsuarioController extends IUsuarioController {
 
         // Cria notificação da exclusão
         await NotificacaoController.criarNotificacao(
-            user._id,
+            Adm._id,
             'exclusao',
             `O funcionário ${user.nome} foi removido do sistema.`
         );

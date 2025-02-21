@@ -3,7 +3,7 @@ const config = require('../config');
 const AuthDAO = require('../persistencelayer/dao/' + config.IAuthDAO);
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const NotificacaoController = require('./NotificacaoController');
+const notificacaoController = new NotificacaoController();
 let authDao = new AuthDAO();
 
 class AuthController extends IAuthController {
@@ -20,7 +20,7 @@ class AuthController extends IAuthController {
       return res.status(400).json({ message: result.erro });
     }
     
-    await NotificacaoController.criarNotificacao(
+    await notificacaoController.criarNotificacao(
       result._id,
       'login',
       `Login realizado com sucesso em ${new Date().toLocaleString()}`
