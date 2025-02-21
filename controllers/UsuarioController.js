@@ -4,6 +4,7 @@ const UsuarioDAO = require('../persistencelayer/dao/' + config.IUsuarioDAO);
 const NotificacaoController = require('./NotificacaoController');
 const notificacaoController = new NotificacaoController();
 let usuarioDao = new UsuarioDAO();
+const Usuario = require('../persistencelayer/models/Usuario');
 const jwt = require('jsonwebtoken');
 
 class UsuarioController extends IUsuarioController {

@@ -62,7 +62,9 @@ class Routes extends IRoutes {
         app.get('/api/funcionarios/cargo/:cargo',  function(req, res) {
             usuarioController.listarPorCargo(req, res);
         });
-        
+        app.get('/api/notificacoes',  function(req, res) {
+            notificacaoController.getNotificacoesGestor(req, res);
+        });
         app.get('/api/mensagens/exibir',  function(req, res) {
             mensagemController.listarMensagens(req, res);
         });
@@ -93,10 +95,6 @@ class Routes extends IRoutes {
 
         app.get('/api/frequencia', function(req, res) {
             frequenciaController.getFrequencia(req, res);
-        });
-
-        app.get('/api/notificacoes', function(req, res) {
-            notificacaoController.listarTudo(req, res);
         });
 
             //---------Rotas em construção------------
