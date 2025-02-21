@@ -21,6 +21,10 @@ class NotificacaoDAO_mongoose extends INotificacaoDAO {
     return await Notificacao.create(dados);
   }
 
+  async listarTudo() {
+    return await Notificacao.find();
+  }
+
   async marcarComoLida(notificacaoId) {
     return await Notificacao.findByIdAndUpdate(
       notificacaoId,

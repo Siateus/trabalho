@@ -2,7 +2,7 @@ const IUsuarioController = require('./IUsuarioController');
 const config = require('../config');
 const UsuarioDAO = require('../persistencelayer/dao/' + config.IUsuarioDAO);
 const NotificacaoController = require('./NotificacaoController');
-const notificacaoController = new NotificacaoController(); 
+const notificacaoController = new NotificacaoController();
 let usuarioDao = new UsuarioDAO();
 const jwt = require('jsonwebtoken');
 
@@ -122,51 +122,93 @@ class UsuarioController extends IUsuarioController {
   }
 
   async deletarFuncionario(req, res) {
-    try {
-        // Deleta o funcionário
-        let user = await usuarioDao.deletarFuncionario(req.params.id);
-        
-        if (!user) {
-            return res.status(404).json({ message: 'Usuário não encontrado' });
-        }
+      try {
+          const { id } = req.params;
 
-        // Verifica se o administrador existe
-        let Adm = await usuarioDao.getPerfil(req.params.idAdm);
-        if (!Adm) {
-            return res.status(403).json({ message: 'Administrador não encontrado ou sem permissão' });
-        }
+          console.log('Tentando deletar funcionário com ID:', id); // Debug
 
-        // Cria notificação da exclusão
-        await NotificacaoController.criarNotificacao(
-            Adm._id,
-            'exclusao',
-            `O funcionário ${user.nome} foi removido do sistema.`
-        );
+          // Verificar se o ID é válido
+          if (!id) {
+              return res.status(400).json({
+                  success: false,
+                  message: 'ID do funcionário não fornecido'
+              });
+          }
 
-        return res.json({ message: 'Usuário deletado com sucesso' });
-    } catch (error) {
-        return res.status(500).json({ message: 'Erro ao deletar usuário', error: error.message });
-    }
-}
+          // Verificar se o funcionário existe
+          const funcionario = await Usuario.findById(id);
+          if (!funcionario) {
+              return res.status(404).json({
+                  success: false,
+                  message: 'Funcionário não encontrado'
+              });
+          }
 
+          // Primeiro tentar deletar a autenticação
+          try {
+              await Auth.findOneAndDelete({ usuario: id });
+          } catch (authError) {
+              console.error('Erro ao deletar autenticação:', authError);
+              // Continuar mesmo se falhar a deleção da auth
+          }
+
+          // Deletar o usuário
+          const usuarioDeletado = await Usuario.findByIdAndDelete(id);
+          if (!usuarioDeletado) {
+              return res.status(404).json({
+                  success: false,
+                  message: 'Erro ao deletar usuário'
+              });
+          }
+
+          // Criar notificação
+          try {
+              await notificacaoController.criarNotificacao(
+                  id,
+                  'exclusao',
+                  `O funcionário ${funcionario.nome} foi removido do sistema.`
+              );
+          } catch (notifError) {
+              console.error('Erro ao criar notificação:', notifError);
+              // Continuar mesmo se falhar a criação da notificação
+          }
+
+          return res.status(200).json({
+              success: true,
+              message: 'Funcionário deletado com sucesso'
+          });
+
+      } catch (error) {
+          console.error('Erro ao deletar funcionário:', error);
+          return res.status(500).json({
+              success: false,
+              message: 'Erro interno ao deletar funcionário',
+              error: error.message
+          });
+      }
+  }
 
 async editarFuncionario(req, res) {
   try {
+    console.log(req.body);
+    console.log(req.params.id);
+    console.log(req.params.idAdm);
       // Busca o administrador que está realizando a ação
       let Adm = await usuarioDao.getPerfil(req.params.idAdm);
       if (!Adm) {
           return res.status(403).json({ message: 'Administrador não encontrado ou sem permissão' });
       }
-
+      
       // Edita os dados do funcionário
       let user = await usuarioDao.editarFuncionario(req.params.id, req.body);
       if (!user) {
           return res.status(404).json({ message: 'Usuário não encontrado' });
       }
-
+      console.log(user);
       // Cria a notificação de alteração
-      await NotificacaoController.criarNotificacao(
-          Adm._id,
+    
+      await notificacaoController.criarNotificacao(
+          user._id,
           'alteracao',
           `O funcionário ${user.nome} teve seus dados atualizados.`
       );

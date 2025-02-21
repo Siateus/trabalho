@@ -108,9 +108,13 @@ async cadastrarFuncionario(dados) {
     return user;
   }
 
-  async editarFuncionario(req) {
-    let user = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    return user;
+  async editarFuncionario(id, dados) {
+    const funcionario = await Usuario.findByIdAndUpdate(
+      id,
+      { $set: dados },
+      { new: true }
+    );
+    return funcionario;
   }
 }
 

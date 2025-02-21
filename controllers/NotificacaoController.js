@@ -11,6 +11,12 @@ class NotificacaoController extends INotificacaoController {
     this.notificacaoDao = new NotificacaoDAO();
 
   }
+
+  async listarTudo(req, res) {
+    const notificacoes = await this.notificacaoDao.listarTudo(req);
+    res.status(200).json(notificacoes);
+  }
+  
   async listarNotificacoes(req, res) {
     try {
       const notificacoes = await notificacaoDao.listarNotificacoes(req.params.id);

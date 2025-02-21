@@ -2,6 +2,7 @@ class INotificacaoController {
   constructor() {}
   listarNotificacoes() {}
   criarNotificacao() {}
+  listarTudo() {}
   marcarComoLida() {}
 }
 
