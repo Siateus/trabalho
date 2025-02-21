@@ -47,12 +47,13 @@ class AuthDAO_mongoose extends IAuthDAO {
           email: gestor.email,
           tipo: gestor.tipo
         },
-        'senhaParaProtegerOToken'// Chave secreta para proteger o token
+        'senhaParaProtegerOToken',// Chave secreta para proteger o token
+        
       );
      
      
       // Retorna o token gerado
-      return token;
+      return gestor._id;
   
     } catch (error) {
       // Retorna erro em caso de falha na autenticação

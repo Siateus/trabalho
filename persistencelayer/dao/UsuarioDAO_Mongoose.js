@@ -26,7 +26,7 @@ class UsuarioDAO_mongoose extends IUsuarioDAO {
 
 
 
-async getPerfil(userId) { // Alterado para aceitar userId como argumento
+async getPerfil(userId) { 
   try {
     const usuario = await Usuario.findById(userId);
     if (!usuario) {
