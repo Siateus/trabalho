@@ -1,6 +1,7 @@
 const IUsuarioController = require('./IUsuarioController');
 const config = require('../config');
 const UsuarioDAO = require('../persistencelayer/dao/' + config.IUsuarioDAO);
+const NotificacaoController = require('./NotificacaoController');
 const notificacaoController = new NotificacaoController(); 
 let usuarioDao = new UsuarioDAO();
 const jwt = require('jsonwebtoken');

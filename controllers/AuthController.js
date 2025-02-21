@@ -3,6 +3,7 @@ const config = require('../config');
 const AuthDAO = require('../persistencelayer/dao/' + config.IAuthDAO);
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const NotificacaoController = require('./NotificacaoController');
 const notificacaoController = new NotificacaoController();
 let authDao = new AuthDAO();
 
