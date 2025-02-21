@@ -56,16 +56,16 @@ class Routes extends IRoutes {
         app.get('/api/funcionarios', function(req, res) {
             usuarioController.listarFuncionarios(req, res);
         });
-        app.get('/api/funcionarios/:id', authController.logado(['gestor']), function(req, res) {
+        app.get('/api/funcionarios/:id',  function(req, res) {
             usuarioController.getUsuario(req, res);
         });
-        app.get('/api/funcionarios/cargo/:cargo', authController.logado(['gestor']), function(req, res) {
+        app.get('/api/funcionarios/cargo/:cargo',  function(req, res) {
             usuarioController.listarPorCargo(req, res);
         });
-        app.get('/api/notificacoes', authController.logado(['gestor']), function(req, res) {
+        app.get('/api/notificacoes',  function(req, res) {
             notificacaoController.getNotificacoesGestor(req, res);
         });
-        app.get('/api/mensagens/exibir', authController.logado(['gestor']), function(req, res) {
+        app.get('/api/mensagens/exibir',  function(req, res) {
             mensagemController.listarMensagens(req, res);
         });
 
@@ -76,7 +76,7 @@ class Routes extends IRoutes {
 
 
 
-        app.get('/api/perfillogado', authController.logado(['funcionario', 'gestor']), function(req, res) {
+        app.get('/api/perfillogado', function(req, res) {
             usuarioController.getPerfil(req, res);
         });
 
@@ -85,7 +85,7 @@ class Routes extends IRoutes {
          app.get('/api/perfil/:id',  function(req, res) {
             usuarioController.getPerfil(req, res);
         });
-        app.get('/api/notificacoes/:id', authController.logado(['funcionario', 'gestor']), function(req, res) {
+        app.get('/api/notificacoes/:id', function(req, res) {
             notificacaoController.listarNotificacoes(req, res);
         });
         
@@ -114,40 +114,40 @@ class Routes extends IRoutes {
         app.post('/api/funcionarios/login', function(req, res) {
               authController.loginFuncionario(req, res);
         });
-        app.post('/api/funcionarios/cadastrar', authController.logado(['gestor']), function(req, res) {
+        app.post('/api/funcionarios/cadastrar', function(req, res) {
             usuarioController.cadastrarFuncionario(req, res);
         });
-        app.post('/api/funcionarios/frequencia', authController.logado(['funcionario']), function(req, res) {
+        app.post('/api/funcionarios/frequencia',  function(req, res) {
             frequenciaController.registrarFrequencia(req, res);
         });
-        app.post('/api/mensagens/funcionario/:id', authController.logado(['gestor']), function(req, res) {
+        app.post('/api/mensagens/funcionario/:id',  function(req, res) {
             mensagemController.enviarMensagemParaFuncionario(req, res);
         });
-        app.post('/api/mensagens/todos', authController.logado(['gestor']), function(req, res) {
+        app.post('/api/mensagens/todos',  function(req, res) {
             notificacaoController.enviarMensagemParaTodos(req, res);
         });
         // ---------------rotas em construção---------------------
         /*app.post('/perfil/imagem', function(req, res) {
             perfilController.adicionarImagemPerfil(req, res);
         });  
-        app.post('/api/relatorios', authController.logado(['gestor']), function(req, res) {
+        app.post('/api/relatorios',  function(req, res) {
             relatorioController.createRelatorio(req, res);
         });*/
     }
     put() {
-        app.put('/api/funcionarios/:id', authController.logado(['gestor']), function(req, res) {
+        app.put('/api/funcionarios/:id',  function(req, res) {
             usuarioController.editarFuncionario(req, res);
         });
     }
 
     delete() {
-        app.delete('/api/funcionarios/:id', authController.logado(['gestor']), function(req, res) {
+        app.delete('/api/funcionarios/:id', function(req, res) {
             usuarioController.deletarFuncionario(req, res);
         });
-        app.delete('/api/mensagens/deletar/:id', authController.logado(['gestor']), function(req, res) {
+        app.delete('/api/mensagens/deletar/:id',  function(req, res) {
             mensagemController.deletarMensagem(req, res);
         });
-        app.delete('/api/notificacoes/:id', authController.logado(['gestor']), function(req, res) {
+        app.delete('/api/notificacoes/:id',  function(req, res) {
             notificacaoController.deletarNotificacao(req, res);
         });
     }
