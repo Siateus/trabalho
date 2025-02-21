@@ -36,7 +36,7 @@ class AuthController extends IAuthController {
 
     // Se o login foi bem-sucedido, retorna o token
     res.cookie('token', result);
-    res.status(200).json({ message: 'Login bem-sucedido'}, token);
+    res.status(200).json({ message: 'Login bem-sucedido', token: result });
   }
 
   // Função para deslogar o usuário
