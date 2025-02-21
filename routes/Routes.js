@@ -53,7 +53,7 @@ class Routes extends IRoutes {
         });
 
         // Rotas protegidas para gestores
-        app.get('/api/funcionarios', authController.logado(['gestor']), function(req, res) {
+        app.get('/api/funcionarios', function(req, res) {
             usuarioController.listarFuncionarios(req, res);
         });
         app.get('/api/funcionarios/:id', authController.logado(['gestor']), function(req, res) {
