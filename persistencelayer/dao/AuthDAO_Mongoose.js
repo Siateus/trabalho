@@ -50,6 +50,7 @@ class AuthDAO_mongoose extends IAuthDAO {
         'senhaParaProtegerOToken'// Chave secreta para proteger o token
       );
      
+     
       // Retorna o token gerado
       return token;
   
