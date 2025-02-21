@@ -135,13 +135,13 @@ class Routes extends IRoutes {
         });*/
     }
     put() {
-        app.put('/api/funcionarios/editar/:id', authController.logado(['gestor']), function(req, res) {
+        app.put('/api/funcionarios/:id', authController.logado(['gestor']), function(req, res) {
             usuarioController.editarFuncionario(req, res);
         });
     }
 
     delete() {
-        app.delete('/api/funcionarios/deletar/:id', authController.logado(['gestor']), function(req, res) {
+        app.delete('/api/funcionarios/:id', authController.logado(['gestor']), function(req, res) {
             usuarioController.deletarFuncionario(req, res);
         });
         app.delete('/api/mensagens/deletar/:id', authController.logado(['gestor']), function(req, res) {
