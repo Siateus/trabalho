@@ -34,9 +34,6 @@ class UsuarioDAO_mongoose extends IUsuarioDAO {
     return idade;
   }
 
-
-
-
 async getPerfil(userId) { 
   try {
     const usuario = await Usuario.findById(userId);
@@ -106,6 +103,7 @@ async cadastrarFuncionario(dados) {
   }
 
   async deletarFuncionario(req) {
+    let auth = await Auth.findOneAndDelete({ usuario: req.params.id });
     let user = await Usuario.findByIdAndDelete(req.params.id);
     return user;
   }
