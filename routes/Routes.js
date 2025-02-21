@@ -35,19 +35,14 @@ class Routes extends IRoutes {
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(express.static('public'));
         app.use(cors({
-            origin: ['http://localhost:3000', 'http://localhost:19006', 'http://192.168.1.X:19006'], // Adicione suas origens
+            origin: '*',
             credentials: true,
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
-          }));
+        }));
         app.use(cookieParser());
         app.use(bodyParser.json());
-        app.options('*', (req, res) => {
-            res.header('Access-Control-Allow-Origin', '*');
-            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-            res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
-            res.sendStatus(200);
-          });
+       
           
     }
     
@@ -158,8 +153,8 @@ class Routes extends IRoutes {
     }
 
     listen() {
-        app.listen(3000, function() {
-            console.log('server iniciado');
+        app.listen(3000, '0.0.0.0', function() {
+            console.log('servidor iniciado na porta 3000');
         });
     }
 }
