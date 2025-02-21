@@ -11,33 +11,24 @@ class NotificacaoDAO_mongoose extends INotificacaoDAO {
     });
   }
 
-  async criarNotificacao(req) {
-    try {
-      const notificacao = new Notificacao(req.body);
-      await notificacao.save();
-      return notificacao;
-    } catch (error) {
-      throw new Error('Erro ao criar notificação');
-    }
+  async listarNotificacoes(usuarioId) {
+    return await Notificacao.find({ usuario: usuarioId })
+      .sort({ data: -1 })
+      .populate('usuario', 'nome email');
   }
 
-  async listarNotificacoes(req) {
-    try {
-      const notificacoes = await Notificacao.find({ usuario: req.params.id });
-      return notificacoes;
-    } catch (error) {
-      throw new Error('Erro ao listar notificações');
-    }
+  async criarNotificacao(dados) {
+    return await Notificacao.create(dados);
   }
 
-  async deletarNotificacao(req) {
-    try {
-      const notificacao = await Notificacao.findByIdAndDelete(req.params.id);
-      return notificacao;
-    } catch (error) {
-      throw new Error('Erro ao deletar notificação');
-    }
+  async marcarComoLida(notificacaoId) {
+    return await Notificacao.findByIdAndUpdate(
+      notificacaoId,
+      { lida: true },
+      { new: true }
+    );
   }
+
 }
 
 module.exports = NotificacaoDAO_mongoose;

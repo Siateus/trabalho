@@ -3,6 +3,7 @@ const config = require('../config');
 const AuthDAO = require('../persistencelayer/dao/' + config.IAuthDAO);
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const NotificacaoController = require('./NotificacaoController');
 let authDao = new AuthDAO();
 
 class AuthController extends IAuthController {
@@ -18,9 +19,12 @@ class AuthController extends IAuthController {
     if (result.erro) {
       return res.status(400).json({ message: result.erro });
     }
-    console.log(result);
-    // Se o login foi bem-sucedido, retorna o token
-    //res.cookie('token', result);
+    
+    await NotificacaoController.criarNotificacao(
+      result._id,
+      'login',
+      `Login realizado com sucesso em ${new Date().toLocaleString()}`
+    );
     res.status(200).json({ message: 'Login bem-sucedido',
       token: result
     });

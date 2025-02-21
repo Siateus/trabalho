@@ -1,6 +1,7 @@
 const IUsuarioController = require('./IUsuarioController');
 const config = require('../config');
 const UsuarioDAO = require('../persistencelayer/dao/' + config.IUsuarioDAO);
+const NotificacaoController = require('./NotificacaoController');
 let usuarioDao = new UsuarioDAO();
 const jwt = require('jsonwebtoken');
 
@@ -80,6 +81,7 @@ class UsuarioController extends IUsuarioController {
       };
 
       const user = await usuarioDao.cadastrarFuncionario(funcionarioData);
+
       return res.json({ 
         message: 'Funcionário cadastrado com sucesso', 
         user 
@@ -120,27 +122,60 @@ class UsuarioController extends IUsuarioController {
 
   async deletarFuncionario(req, res) {
     try {
-      let user = await usuarioDao.deletarFuncionario(req);
-      if (!user) {
-        return res.status(404).json({ message: 'Usuário não encontrado' });
-      }
-      return res.json({ message: 'Usuário deletado com sucesso' });
-    } catch (error) {
-      return res.status(500).json({ message: 'Erro ao deletar usuário' });
-    }
-  }
+        // Deleta o funcionário
+        let user = await usuarioDao.deletarFuncionario(req.params.id);
+        
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
 
-  async editarFuncionario(req, res) {
-    try {
-      let user = await usuarioDao.editarFuncionario(req);
-      if (!user) {
-        return res.status(404).json({ message: 'Usuário não encontrado' });
-      }
-      return res.json({ message: 'Funcionário atualizado com sucesso', user });
+        // Verifica se o administrador existe
+        let Adm = await usuarioDao.getPerfil(req.params.idAdm);
+        if (!Adm) {
+            return res.status(403).json({ message: 'Administrador não encontrado ou sem permissão' });
+        }
+
+        // Cria notificação da exclusão
+        await NotificacaoController.criarNotificacao(
+            user._id,
+            'exclusao',
+            `O funcionário ${user.nome} foi removido do sistema.`
+        );
+
+        return res.json({ message: 'Usuário deletado com sucesso' });
     } catch (error) {
-      return res.status(500).json({ message: 'Erro ao atualizar funcionário' });
+        return res.status(500).json({ message: 'Erro ao deletar usuário', error: error.message });
     }
+}
+
+
+async editarFuncionario(req, res) {
+  try {
+      // Busca o administrador que está realizando a ação
+      let Adm = await usuarioDao.getPerfil(req.params.idAdm);
+      if (!Adm) {
+          return res.status(403).json({ message: 'Administrador não encontrado ou sem permissão' });
+      }
+
+      // Edita os dados do funcionário
+      let user = await usuarioDao.editarFuncionario(req.params.id, req.body);
+      if (!user) {
+          return res.status(404).json({ message: 'Usuário não encontrado' });
+      }
+
+      // Cria a notificação de alteração
+      await NotificacaoController.criarNotificacao(
+          Adm._id,
+          'alteracao',
+          `O funcionário ${user.nome} teve seus dados atualizados.`
+      );
+
+      return res.json({ message: 'Funcionário atualizado com sucesso', user });
+  } catch (error) {
+      return res.status(500).json({ message: 'Erro ao atualizar funcionário', error: error.message });
   }
+}
+
 }
 function validaEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

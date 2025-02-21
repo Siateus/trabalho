@@ -1,38 +1,45 @@
-const INotificacaoController = require('./INotificacaoController');
-const config = require('../config');
-const NotificacaoDAO = require('../persistencelayer/dao/' + config.INotificacaoDAO);
-let notificacaoDao = new NotificacaoDAO();
 
-class NotificacaoController extends INotificacaoController {
+const INotificacaoController = require('./INotificacaoController');
+const NotificacaoDAO = require('../persistencelayer/dao/' + config.INotificacaoDAO);
+const config = require('../config');
+
+const notificacaoDao = new NotificacaoDAO();
+
+class NotificacaoController {
   constructor() {
     super();
-  }
+    this.notificacaoDao = new NotificacaoDAO();
 
-  async criarNotificacao(req, res) {
-    try {
-      let notificacoes = await notificacaoDao.criarNotificacao(req);
-      return res.json(notificacoes);
-    } catch (error) {
-      return res.status(500).send('Erro ao obter notificações do gestor');
-    }
   }
-
   async listarNotificacoes(req, res) {
     try {
-      let notificacoes = await notificacaoDao.listarNotificacoes(req);
-      return res.json(notificacoes);
+      const notificacoes = await notificacaoDao.listarNotificacoes(req.params.id);
+      res.json(notificacoes);
     } catch (error) {
-      return res.status(500).send('Erro ao listar notificações do funcionário');
+      res.status(500).json({ message: 'Erro ao listar notificações' });
     }
   }
-  async deletarNotificacao(req, res) {
+
+  async criarNotificacao(usuarioId, tipo, mensagem) {
     try {
-      let notificacoes = await notificacaoDao.deletarNotificacao(req);
-      return res.json(notificacoes);
+      await notificacaoDao.criarNotificacao({
+        usuario: usuarioId,
+        tipo,
+        mensagem
+      });
     } catch (error) {
-      return res.status(500).send('Erro ao deletar notificações do funcionário');
+      console.error('Erro ao criar notificação:', error);
+    }
+  }
+
+  async marcarComoLida(req, res) {
+    try {
+      await notificacaoDao.marcarComoLida(req.params.id);
+      res.json({ message: 'Notificação marcada como lida' });
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao marcar notificação como lida' });
     }
   }
 }
 
-module.exports = NotificacaoController;
+module.exports = new NotificacaoController();

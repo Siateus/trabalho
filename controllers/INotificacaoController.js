@@ -1,8 +1,8 @@
 class INotificacaoController {
   constructor() {}
-  criarNotificacao() {}
   listarNotificacoes() {}
-  deletarNotificacao() {}
+  criarNotificacao() {}
+  marcarComoLida() {}
 }
 
 module.exports = INotificacaoController;
