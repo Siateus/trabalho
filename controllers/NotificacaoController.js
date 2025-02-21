@@ -5,7 +5,7 @@ const config = require('../config');
 
 const notificacaoDao = new NotificacaoDAO();
 
-class NotificacaoController {
+class NotificacaoController extends INotificacaoController {
   constructor() {
     super();
     this.notificacaoDao = new NotificacaoDAO();
