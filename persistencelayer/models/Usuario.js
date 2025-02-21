@@ -4,7 +4,7 @@ const usuarioSchema = new mongoose.Schema({
   nome: { type: String, required: true },
   cpf: { type: String, required: true, unique: true },
   dataNascimento: { type: Date, required: true },
-  idade: { type: Number, required: true },
+  idade: { type: Number },
   email: { type: String, required: true, unique: true },
   cargo: { type: String, required: true },
   status: { type: String, required: true },
