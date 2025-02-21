@@ -42,4 +42,4 @@ class NotificacaoController extends INotificacaoController {
   }
 }
 
-module.exports = NotificacaoController();
+module.exports = NotificacaoController;
