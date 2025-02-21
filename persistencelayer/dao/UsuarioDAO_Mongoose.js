@@ -106,84 +106,13 @@ async cadastrarFuncionario(dados) {
   }
 
   async deletarFuncionario(req) {
-    try {
-      // Start a session for transaction
-      const session = await mongoose.startSession();
-      session.startTransaction();
-
-      try {
-        // Find and delete the user
-        const user = await Usuario.findById(req.params.id);
-        
-        if (!user) {
-          throw new Error('Usuário não encontrado');
-        }
-
-        // Delete the associated auth record
-        await Auth.deleteOne({ usuario: user._id });
-
-        // Delete the user
-        await Usuario.deleteOne({ _id: user._id });
-
-        // Commit the transaction
-        await session.commitTransaction();
-        session.endSession();
-
-        return user;
-
-      } catch (error) {
-        // If anything fails, abort the transaction
-        await session.abortTransaction();
-        session.endSession();
-        throw error;
-      }
-    } catch (error) {
-      console.error('Erro ao deletar funcionário:', error);
-      throw new Error(error.message || 'Erro ao deletar funcionário');
-    }
+    let user = await Usuario.findByIdAndDelete(req.params.id);
+    return user;
   }
 
-  // You might also want to update the editarFuncionario method to handle auth updates:
   async editarFuncionario(req) {
-    try {
-      const session = await mongoose.startSession();
-      session.startTransaction();
-
-      try {
-        // Update the user
-        const user = await Usuario.findByIdAndUpdate(
-          req.params.id, 
-          req.body, 
-          { new: true, session }
-        );
-
-        if (!user) {
-          throw new Error('Usuário não encontrado');
-        }
-
-        // If email was updated, update it in Auth collection too
-        if (req.body.email) {
-          await Auth.findOneAndUpdate(
-            { usuario: user._id },
-            { email: req.body.email },
-            { session }
-          );
-        }
-
-        await session.commitTransaction();
-        session.endSession();
-
-        return user;
-
-      } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-        throw error;
-      }
-    } catch (error) {
-      console.error('Erro ao atualizar funcionário:', error);
-      throw new Error(error.message || 'Erro ao atualizar funcionário');
-    }
+    let user = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    return user;
   }
 }
 
